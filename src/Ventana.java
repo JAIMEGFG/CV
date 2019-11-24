@@ -30,6 +30,7 @@ public class Ventana extends JFrame  implements ActionListener {
     JPanel panelcentro, panelInsertar, panelBuscar;
     CardLayout cardLayout;
     ArrayList datosPersona;
+    int opcion;
 
     public void initGUI(){
         instancias();
@@ -251,14 +252,27 @@ public class Ventana extends JFrame  implements ActionListener {
                     int aniosExperiencia = Integer.valueOf(anios.getModel().getValue().toString());
                     Persona persona = new Persona(nombre,direccion,dni,telefono,aniosExperiencia);
                     datosPersona.add(persona);
+                    JOptionPane.showMessageDialog(container, "Persona Añadida",
+                            "DATOS DE CURRICULUM", JOptionPane.INFORMATION_MESSAGE, null);
                 }
 
-        } else if (e.getSource()==salir){
-            System.exit(0);
+        } else if (e.getSource()==salir||e.getSource()==btnSalir){
+            opcion = JOptionPane.showConfirmDialog(container,
+                    "¿Segudo que quieres Salir?",
+                    "EXIT", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null);
+            if (opcion == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            } else if (opcion == JOptionPane.NO_OPTION) {
+                cardLayout.show(container,Constantes.TAG_P1);
+            } else if (opcion == JOptionPane.CANCEL_OPTION) {
+                cardLayout.show(container,Constantes.TAG_P1);
+            }
+
         }else if(e.getSource()==insertar){
             cardLayout.show(container,Constantes.TAG_P1);
-        }else if (e.getSource()==buscar){
-            cardLayout.show(container,Constantes.TAG_P2);
+        }else if (e.getSource()==buscar) {
+            cardLayout.show(container, Constantes.TAG_P2);
         }
         }
     class ManejoTeclas extends KeyAdapter {
@@ -267,7 +281,7 @@ public class Ventana extends JFrame  implements ActionListener {
             char tecla = e.getKeyChar();
             if (!Character.isDigit(tecla)){
                 e.consume();
-            } else if (tDni.getText().length()>7||tTelefono.getText().length()>8){
+            } else if (tDni.getText().length()>7||tTelefono.getText().length()>9){
                 e.consume();
             }
         }
