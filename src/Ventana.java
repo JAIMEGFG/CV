@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class Ventana extends JFrame implements ActionListener {
+public class Ventana extends JFrame  implements ActionListener {
 
     JLabel nombre, direccion,telefono,dni,seleccionEstudios,anosExperiencia,titulo;
     JLabel nTelefono,nDni,anosExpe,selecEstudios,result;
