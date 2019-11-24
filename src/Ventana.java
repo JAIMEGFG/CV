@@ -1,8 +1,13 @@
+import utils.Persona;
+
 import javax.swing.*;
 import javax.swing.text.View;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 
 public class Ventana extends JFrame  implements ActionListener {
@@ -24,6 +29,7 @@ public class Ventana extends JFrame  implements ActionListener {
     JMenuItem buscar,insertar;
     JPanel panelcentro, panelInsertar, panelBuscar;
     CardLayout cardLayout;
+    ArrayList datosPersona;
 
     public void initGUI(){
         instancias();
@@ -216,6 +222,7 @@ public class Ventana extends JFrame  implements ActionListener {
         btnBuscar = new JButton("BUSCAR");
         btnSalir = new JButton("SALIR");
         tnDni = new JTextField();
+        datosPersona = new ArrayList();
     }
 
     public void acciones(){
@@ -223,22 +230,46 @@ public class Ventana extends JFrame  implements ActionListener {
         salir.addActionListener(this);
         insertar.addActionListener(this);
         buscar.addActionListener(this);
+        tTelefono.addKeyListener(new ManejoTeclas());
+        tDni.addKeyListener(new ManejoTeclas());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource()==insertarDatos){
-            cardLayout.show(container,Constantes.TAG_P2);
-            tNombre.setText("");
-            tDireccion.setText("");
-            tTelefono.setText("");
-            tDni.setText("");
-        }
-        else if (e.getSource()==salir){
+                if (tNombre.getText().isEmpty()||tDireccion.getText().isEmpty()
+                        ||tDni.getText().isEmpty()||tTelefono.getText().isEmpty()) {
+                    tNombre.setText("FALTAN DATOS");
+                    tDireccion.setText("FLATAN DATOS");
+                    tTelefono.setText("FALTAN DATOS");
+                    tDni.setText("FALTAN DATOS");
+                }else {
+                    String nombre = tNombre.getText();
+                    String direccion = tDireccion.getText();
+                    int telefono = Integer.valueOf(tTelefono.getText());
+                    int dni = Integer.valueOf(tDni.getText());
+                    int aniosExperiencia = Integer.valueOf(anios.getModel().getValue().toString());
+                    Persona persona = new Persona(nombre,direccion,dni,telefono,aniosExperiencia);
+                    datosPersona.add(persona);
+                }
+
+        } else if (e.getSource()==salir){
+            System.exit(0);
         }else if(e.getSource()==insertar){
             cardLayout.show(container,Constantes.TAG_P1);
         }else if (e.getSource()==buscar){
             cardLayout.show(container,Constantes.TAG_P2);
         }
         }
+    class ManejoTeclas extends KeyAdapter {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            char tecla = e.getKeyChar();
+            if (!Character.isDigit(tecla)){
+                e.consume();
+            } else if (tDni.getText().length()>7||tTelefono.getText().length()>8){
+                e.consume();
+            }
+        }
+    }
 }
