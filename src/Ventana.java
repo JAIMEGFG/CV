@@ -177,14 +177,14 @@ public class Ventana extends JFrame  implements ActionListener {
         this.setJMenuBar(barraMenu);
     }
 
-    public void instancias(){
+    public void instancias() {
 
         nombre = new JLabel("NOMBRE");
         telefono = new JLabel("TELÉFONO");
         direccion = new JLabel("DIRECCIÓN");
         dni = new JLabel("DNI");
         seleccionEstudios = new JLabel("SELECCIONA TUS ESTUDIOS");
-        anosExperiencia = new JLabel("AÑOS DE EXPERIENCIA");
+        anosExperiencia = new JLabel("AÑOS DE EXP ERIENCIA");
         titulo = new JLabel("PORFAVOR,RELLENA LOS DATOS DE TU CURRICULUM");
         tNombre = new JTextField();
         tDireccion = new JTextField();
@@ -231,6 +231,7 @@ public class Ventana extends JFrame  implements ActionListener {
         salir.addActionListener(this);
         insertar.addActionListener(this);
         buscar.addActionListener(this);
+        btnBuscar.addActionListener(this);
         tTelefono.addKeyListener(new ManejoTeclas());
         tDni.addKeyListener(new ManejoTeclas());
     }
@@ -250,7 +251,17 @@ public class Ventana extends JFrame  implements ActionListener {
                     int telefono = Integer.valueOf(tTelefono.getText());
                     int dni = Integer.valueOf(tDni.getText());
                     int aniosExperiencia = Integer.valueOf(anios.getModel().getValue().toString());
-                    Persona persona = new Persona(nombre,direccion,dni,telefono,aniosExperiencia);
+                    int estado;
+                    if (divorciado.isSelected()){
+                        estado = 0;
+                    }else if (casado.isSelected()){
+                        estado = 1;
+
+                    }else {
+                        estado = 2;
+                    }
+                    //boolean casado = casado.isChecked();
+                    Persona persona = new Persona(nombre,direccion,dni,telefono,aniosExperiencia,estado);
                     datosPersona.add(persona);
                     JOptionPane.showMessageDialog(container, "Persona Añadida",
                             "DATOS DE CURRICULUM", JOptionPane.INFORMATION_MESSAGE, null);
@@ -273,6 +284,8 @@ public class Ventana extends JFrame  implements ActionListener {
             cardLayout.show(container,Constantes.TAG_P1);
         }else if (e.getSource()==buscar) {
             cardLayout.show(container, Constantes.TAG_P2);
+        }else if (e.getSource()==btnBuscar){
+            tresult.setText(String.valueOf(datosPersona));
         }
         }
     class ManejoTeclas extends KeyAdapter {
